@@ -1,0 +1,33 @@
+<h1>{{user.id == null ? 'Add' : 'Edit'}} User</h1> <!--Showing add or edit as lable heading based on forms -->
+
+<div class="bg-warning p-5" *ngIf="message">{{message}}</div>
+
+<form #userForm="ngForm"> <!--userForm will be a reference name given to access this element somewhere-->
+
+  <div class="form-group">
+    <label for="name">Name</label> 
+    <input type="text" class="form-control" id="name" placeholder="user name" [(ngModel)]="formUser.name" name="name" 
+    required #nameField="ngModel" (change)="setIfNameIsValid()">
+    <div *ngIf="nameField.touched && nameField.invalid" class="alert alert-danger">Name is required</div>
+    <div *ngIf="nameField.touched && !isNameValid" class="alert alert-danger">Name cannot be blank</div>
+  </div>
+
+  <div class="form-group" *ngIf="user.id == null"> <!-- only show this field on adding a user -->
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" placeholder="password" name="password" [(ngModel)]="password" 
+    #passwordField="ngModel" (change)="setIfPassValid()" required>
+    <div class="alert alert-danger" *ngIf=" passwordField.touched && !arePassValid ">Password cannot be blank</div>
+    <div class="alert alert-danger" *ngIf=" passwordField.touched && passwordField.invalid ">Password required</div>
+  </div>
+
+  <div class="form-group" *ngIf="user.id == null"> <!-- only show this field on adding a user -->
+    <label for="password">Confirm Password</label>
+    <input type="password" class="form-control" id="ConfirmPass" placeholder="confirm password" name="confirmPass" [(ngModel)]="password2" 
+    required (change)="setIfPassValid()" #confirmPass="ngModel">
+    <div class="alert alert-danger" *ngIf="confirmPass.touched || !passwordMatch">Password don't match</div>
+  </div>
+  
+  <button type="button" class="btn btn-primary" (click)="addOrEditUser()" [disabled]="userForm.invalid">Save</button>
+</form>
+
+

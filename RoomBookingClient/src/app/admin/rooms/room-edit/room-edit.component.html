@@ -1,0 +1,24 @@
+<h1> {{room.id == null ? 'Add' : 'Edit'}} Room</h1>
+
+<form [formGroup]="roomsForm">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" placeholder="room name" formControlName="roomName" required>
+    <div class="alert alert-danger"></div>
+
+  </div> 
+  <div class="form-group">
+    <label for="location">Location</label>
+    <input type="text" class="form-control" id="location"formControlName="roomLocation" placeholder="location" required >
+    <div class="alert alert-danger"></div>
+  </div>
+
+  <h2>This room can accomodate:</h2>
+
+  <!--programitically created form fields.-->
+  <div class="form-group" *ngFor="let layout of layouts">
+    <label for="Layout{{layout}}">{{layoutEnum[layout]}}</label>
+    <input type="number" class ="form-control" id="Layout{{layout}}" formControlName="Layout{{layout}}">
+  </div>
+  <button type="button" (click)="onSubmit()" class="btn btn-primary">Save</button>
+</form>
