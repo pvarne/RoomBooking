@@ -4,13 +4,13 @@
   <div class="form-group">
     <label for="name">Name</label>
     <input type="text" class="form-control" id="name" placeholder="room name" formControlName="roomName" required>
-    <div class="alert alert-danger"></div>
+    <div class="alert alert-danger" *ngIf="roomsForm.controls['roomName'].invalid && roomsForm.controls['roomName'].dirty">Room name cannot be empty</div>
 
   </div> 
   <div class="form-group">
     <label for="location">Location</label>
     <input type="text" class="form-control" id="location"formControlName="roomLocation" placeholder="location" required >
-    <div class="alert alert-danger"></div>
+    <div class="alert alert-danger" *ngIf="roomsForm.controls['roomLocation'].invalid && roomsForm.controls['roomLocation'].dirty">Location cannot be empty</div>
   </div>
 
   <h2>This room can accomodate:</h2>
@@ -20,5 +20,5 @@
     <label for="Layout{{layout}}">{{layoutEnum[layout]}}</label>
     <input type="number" class ="form-control" id="Layout{{layout}}" formControlName="Layout{{layout}}">
   </div>
-  <button type="button" (click)="onSubmit()" class="btn btn-primary">Save</button>
+  <button type="button" (click)="onSubmit()" class="btn btn-primary" [disabled]="roomsForm.invalid">Save</button>
 </form>
