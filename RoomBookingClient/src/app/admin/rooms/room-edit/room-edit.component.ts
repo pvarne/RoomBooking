@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { DataService } from 'src/app/data.service';
 import { Layout, LayoutCapacities, Room } from 'src/app/model/Room';
 
 @Component({
@@ -24,7 +26,7 @@ export class RoomEditComponent {
  //roomName = new FormControl('roomName'); //  roomName is the label which is going to match the label on form.
  //this is done seperetely justto understand declerations els it should be pasted in formGroup.
 
- constructor(private formBuilder :FormBuilder){
+ constructor(private formBuilder :FormBuilder, private dataService :DataService, private router : Router){
 
  }
 
@@ -56,6 +58,16 @@ export class RoomEditComponent {
     layoutCapacity.layout = Layout[layout];
     layoutCapacity.capacity = this.roomsForm.controls[`Layout${layout}`].value; // form control name
     this.room.capacities.push(layoutCapacity);
+  }
+  if(this.room.id == null){
+    this.dataService.addRoom(this.room).subscribe(next => {
+      this.router.navigate(['admin','rooms'],{queryParams:{action:'add'}});
+    })
+  }
+  else{
+    this.dataService.updateRooms(this.room).subscribe(next => {
+      this.router.navigate(['admin','rooms'],{queryParams:{id:this.room.id, action:'edit'}});
+    })
   }
 }
 }

@@ -100,4 +100,24 @@ export class DataService {
     return of(newUser);
   }
 
+  updateRooms(room:Room){
+    const orignalRoom = this.rooms.find(r => r.id === room.id );
+    orignalRoom.name = room.name;
+    orignalRoom.location = room.location;
+    orignalRoom.capacities = room.capacities;
+    return of(orignalRoom);
+  }
+
+  addRoom(newRoom:Room){
+    let id = 0;
+    for(const room of this.rooms){
+      if(id < room.id){
+        id = room.id;
+      }
+    }
+    newRoom.id = id +1;
+    this.rooms.push(newRoom);
+    return of(newRoom);
+  }
+
 }
