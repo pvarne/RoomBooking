@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
+import { FormResetService } from 'src/app/form-reset.service';
 import { Room } from 'src/app/model/Room';
 
 @Component({
@@ -14,7 +15,8 @@ export class RoomsComponent {
   selectedRoom: Room | undefined ;
   action :string;
 
-  constructor(private dataService :DataService, private route :ActivatedRoute, private router:Router){
+  constructor(private dataService :DataService, private route :ActivatedRoute, private router:Router,
+    private formReset : FormResetService){
   }
   
   ngOnInit(){
@@ -27,6 +29,7 @@ export class RoomsComponent {
       }
       if(this.action === 'add'){
         this.selectedRoom = new Room;
+        this.formReset.formResetRoomEvent.emit(this.selectedRoom);
         this.action = 'edit'; // we did this block on add button click in user component(here a slight change)
       }
     });
