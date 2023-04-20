@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
+import { FormResetService } from 'src/app/form-reset.service';
 import { Layout, LayoutCapacities, Room } from 'src/app/model/Room';
 
 @Component({
@@ -9,10 +11,11 @@ import { Layout, LayoutCapacities, Room } from 'src/app/model/Room';
   templateUrl: './room-edit.component.html',
   styleUrls: ['./room-edit.component.css']
 })
-export class RoomEditComponent {
+export class RoomEditComponent  implements OnInit, OnDestroy{
 
   @Input()
   room :Room;
+  formResetEventUnsubc : Subscription;
   layoutEnum = Layout; // Enum which is declared in room.ts model file.
   layouts = Object.keys(this.layoutEnum); // extracting enum layout and its keys from room model i.e object.
 
@@ -26,11 +29,21 @@ export class RoomEditComponent {
  //roomName = new FormControl('roomName'); //  roomName is the label which is going to match the label on form.
  //this is done seperetely justto understand declerations els it should be pasted in formGroup.
 
- constructor(private formBuilder :FormBuilder, private dataService :DataService, private router : Router){
+ constructor(private formBuilder :FormBuilder, private dataService :DataService, private router : Router,
+  private formReset :FormResetService){
 
  }
 
  ngOnInit(){
+    this.resetForm();
+    this.formResetEventUnsubc = this.formReset.formResetRoomEvent.subscribe((room)=>{
+      this.room = room;
+      this.resetForm();
+    })
+
+ }
+
+ resetForm(){
   // this.roomsForm.patchValue({
   //   roomName : this.room.name,
   //   roomLocation:this.room.location
@@ -70,5 +83,10 @@ export class RoomEditComponent {
     })
   }
 }
+
+ngOnDestroy(): void {
+  this.formResetEventUnsubc.unsubscribe();
+}
+
 }
 

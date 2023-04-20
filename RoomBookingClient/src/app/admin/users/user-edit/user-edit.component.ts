@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DataService } from 'src/app/data.service';
+import { FormResetService } from 'src/app/form-reset.service';
 import { User } from 'src/app/model/User';
 
 @Component({
@@ -20,14 +21,23 @@ export class UserEditComponent {
   arePassValid = true;
   passwordMatch = true;
 
-  constructor(private dataService :DataService, private router :Router){}
+  constructor(private dataService :DataService, private router :Router, private formReset :FormResetService){}
   // binding direct user of @input to html element is shwoing direct change on screen without even save btn.
   // so we are making a clone of user in formUser with below method.
   ngOnInit(){ 
-    this.formUser = Object.assign([],this.user);
-    this.setIfNameIsValid();
-    this.setIfPassValid();
+   this.initialization();
+    this.formReset.formResetUserEvent.subscribe((user)=>{
+      this.user = user;
+      this.initialization();
+    }) 
     }
+
+    initialization(){
+      this.formUser = Object.assign([],this.user);
+      this.setIfNameIsValid();
+      this.setIfPassValid();
+    }
+    
   addOrEditUser(){
     if(this.user.id){
     this.dataService.updateUsers(this.formUser).subscribe((user)=>
