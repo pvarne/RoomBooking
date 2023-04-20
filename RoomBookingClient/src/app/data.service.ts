@@ -120,4 +120,16 @@ export class DataService {
     return of(newRoom);
   }
 
+  deleteUser(userId : number) : Observable<any>{
+    let user = this.users.find(u =>u.id == userId);
+    this.users.splice(this.users.indexOf(user),1);
+    return of(null);
+  }
+
+  deleteRoom(roomId :number): Observable<any>{
+    let room = this.rooms.find(r =>r.id == roomId);
+    this.rooms.splice(this.rooms.indexOf(room),1);
+    return of(null);
+  }
+
 }

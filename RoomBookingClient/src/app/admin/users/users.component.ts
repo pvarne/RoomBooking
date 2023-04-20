@@ -38,5 +38,6 @@ export class UsersComponent {
     this.router.navigate(['admin','users'],{queryParams : {action:'add'}});
     this.formReset.formResetUserEvent.emit(this.selectedUser);
   }
+  
 }
  
