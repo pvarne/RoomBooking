@@ -1,5 +1,7 @@
+import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { Booking } from './model/Booking';
 import { Layout, LayoutCapacities, Room } from './model/Room';
 import { User } from './model/User';
 
@@ -10,6 +12,7 @@ export class DataService {
  
   private rooms: Array<Room> = new Array<Room>();
   private users: Array<User> = new Array<User>();
+  private bookings = new Array<Booking>();
 
   // This is method called getRooms which returns Array/Observable of type Room. i.e after : content is RT.
   getRooms() : Observable<Array<Room>>{
@@ -77,6 +80,32 @@ export class DataService {
     this.users.push(user1);
     this.users.push(user2);
     this.users.push(user3);
+
+    //Creating booking array for calender module.
+    const b1 = new Booking;
+    b1.id = 1;
+    b1.participants = 5;
+    b1.title ="Conference Meeting";
+    b1.room = room1;
+    b1.user = user1;
+    b1.layout = Layout.BOARD;
+    b1.date = formatDate(new Date, 'yyyy-MM-dd','en_IN');
+    b1.startTime = '11.30';
+    b1.endTime ='2.00';
+
+    const b2 = new Booking;
+    b2.id = 2;
+    b2.participants = 10;
+    b2.title ="Scrum Meeting";
+    b2.room = room2;
+    b2.user = user2;
+    b2.layout = Layout.BOARD;
+    b2.date = formatDate(new Date(), 'yyyy-MM-dd','en_IN');
+    b2.startTime = '2.30';
+    b2.endTime ='5.00';
+
+    this.bookings.push(b1);
+    this.bookings.push(b2);
    }
 
    updateUsers(user: User) :Observable<User> {
@@ -130,6 +159,10 @@ export class DataService {
     let room = this.rooms.find(r =>r.id == roomId);
     this.rooms.splice(this.rooms.indexOf(room),1);
     return of(null);
+  }
+
+  getBooking() : Observable<Array<Booking>>{
+    return of(this.bookings);
   }
 
 }
